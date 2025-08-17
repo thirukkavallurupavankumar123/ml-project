@@ -10,6 +10,7 @@ from sklearn.pipeline import Pipeline
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
+import dill
 
 
 @dataclass
@@ -28,6 +29,9 @@ class DataTransformation:
             categorical_columns =['gender','race_ethnicity','parental_level_of_education','lunch','test_preparation_course']
             logging.info("Numerical columns: %s", numerical_columns)
             logging.info("Categorical columns: %s", categorical_columns)
+
+
+
             num_pipeline = Pipeline(
                 steps=[
                 ('imputer', SimpleImputer(strategy='median')),
@@ -40,6 +44,10 @@ class DataTransformation:
                 ("scaler", StandardScaler(with_mean=False))
             ])
             logging.info("Numerical pipeline and categorical pipeline created")
+
+
+
+
             preprocessor = ColumnTransformer(
                 transformers=[
                     ('num_pipeline', num_pipeline, numerical_columns),
@@ -47,14 +55,21 @@ class DataTransformation:
                 ]
             )
             return preprocessor
+        
+
+
         except Exception as e:
             raise CustomException(e, sys) from e
+        
+
+
     def initiate_data_transformation(self, train_path, test_path):
         try:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
             logging.info("Read train and test dataframes")
             logging.info("Obtaining preprocessing object")
+            
             preprocessing_obj = self.get_data_transformer_object()
             target_column_name = 'math_score'
             numerical_columns = ['writing_score', 'reading_score']
@@ -79,6 +94,7 @@ class DataTransformation:
             train_arr=np.c_[input_feature_train_arr, np.array(target_feature_train_df)]
             test_arr=np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
             logging.info("Saved preprocessing object")
+            
             save_object  (
                 file_path=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessing_obj

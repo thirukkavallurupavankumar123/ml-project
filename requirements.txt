@@ -6,4 +6,5 @@ matplotlib
 seaborn
 catboost
 dill
+flask
 #-e .

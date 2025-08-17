@@ -8,6 +8,7 @@ from src.exception import CustomException
 from src.logger import logging
 from sklearn.compose import ColumnTransformer
 import dill
+import pickle
 from sklearn.metrics import r2_score
 def save_object(file_path, obj):
     """
