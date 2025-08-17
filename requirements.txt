@@ -7,4 +7,5 @@ seaborn
 catboost
 dill
 flask
+gunicorn
 -e .
